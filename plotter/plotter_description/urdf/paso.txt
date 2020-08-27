@@ -1,0 +1,55 @@
+    <transmission name="trans_link_00__link_01">
+            <type>transmission_interface/SimpleTransmission</type>
+            <joint name="Link_00__link_01">
+                <hardwareInterface>hardware_interface/EffortJointInterface</hardwareInterface>
+            </joint>
+            <actuator name="motor_link_00__link_01">
+                <hardwareInterface>hardware_interface/EffortJointInterface</hardwareInterface>
+                <mechanicalReduction>1</mechanicalReduction>
+            </actuator>
+        </transmission>
+      
+        <transmission name="trans_link_01__link_02">
+            <type>transmission_interface/SimpleTransmission</type>
+            <joint name="link_01__link_02">
+                <hardwareInterface>hardware_interface/EffortJointInterface</hardwareInterface>
+            </joint>
+            <actuator name="motor_link_01__link_02">
+                <hardwareInterface>hardware_interface/EffortJointInterface</hardwareInterface>
+                <mechanicalReduction>1</mechanicalReduction>
+            </actuator>
+        </transmission>
+      
+        <transmission name="trans_link_02__link_03">
+            <type>transmission_interface/SimpleTransmission</type>
+            <joint name="link_02__link_03">
+                <hardwareInterface>hardware_interface/EffortJointInterface</hardwareInterface>
+            </joint>
+            <actuator name="motor_link_02__link_03">
+                <hardwareInterface>hardware_interface/EffortJointInterface</hardwareInterface>
+                <mechanicalReduction>1</mechanicalReduction>
+            </actuator>
+        </transmission>
+      
+        <transmission name="trans_link_01__link_02">
+            <type>transmission_interface/SimpleTransmission</type>
+            <joint name="link_01__link_02">
+                <hardwareInterface>hardware_interface/EffortJointInterface</hardwareInterface>
+            </joint>
+            <actuator name="link_01__link_02_motor">
+                <hardwareInterface>hardware_interface/EffortJointInterface</hardwareInterface>
+                <mechanicalReduction>1</mechanicalReduction>
+            </actuator>
+        </transmission>
+      
+        <transmission name="trans_link_02__link_03">
+            <type>transmission_interface/SimpleTransmission</type>
+            <joint name="link_02__link_03">
+                <hardwareInterface>hardware_interface/EffortJointInterface</hardwareInterface>
+            </joint>
+            <actuator name="link_02__link_03_motor">
+                <hardwareInterface>hardware_interface/EffortJointInterface</hardwareInterface>
+                <mechanicalReduction>1</mechanicalReduction>
+            </actuator>
+        </transmission>
+        

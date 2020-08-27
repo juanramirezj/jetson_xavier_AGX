@@ -1,0 +1,29 @@
+<launch>
+    <param name="robot_description" command="$(find xacro)/xacro --inorder '$(find plotter_description)/urdf/plotterv2.xacro'"/>
+
+    <include file="$(find plotter_description)/launch/spawn_robot_v2.launch">
+    <arg name="urdf_robot_file" value="$(find plotter_description)/urdf/plotterv2_gen.urdf" />
+    <arg name="robot_name" value="plotter" />
+    </include>
+
+    <rosparam file="$(find plotter_description)/config/plotter_control.yaml" command="load"/>  
+
+    <node name="controller_spawner" pkg="controller_manager" type="spawner" respawn="false"
+    output="screen" ns="/plotter" args="joint_state_controller link_01__link02_joint_position_controller  link_02__link03_joint_position_controller"/>
+    <!-- send fake joint values -->
+    
+    <node name="joint_state_publisher" pkg="joint_state_publisher" type="joint_state_publisher">
+    <remap from="/joint_states" to="/plotter/joint_states" />
+    <param name="use_gui" value="TRUE"/>
+    </node>
+
+    <!-- convert joint states to TF transforms for rviz, etc -->
+    <node name="robot_state_publisher" pkg="robot_state_publisher" type="robot_state_publisher"
+    respawn="false" output="screen">
+    <remap from="/joint_states" to="/plotter/joint_states" />
+    </node>
+
+    <!-- Show in Rviz -->
+    <node name="rviz" pkg="rviz" type="rviz" args="-d $(find plotter_description)/launch/plotter.rviz"/>
+
+</launch>
