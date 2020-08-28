@@ -13,11 +13,12 @@
 
     <link name="world" />
 
-    <joint name="world__link_00" type="fixed">
+    <joint name="world__link_01" type="fixed">
         <parent link="world"/>
-        <child link="${link_00_name}"/>
+        <child link="${link_01_name}"/>
     </joint>
 
+    <!--
     <link name="${link_00_name}" />
 
     <joint name="${link_00_name}__${link_01_name}" type="fixed">
@@ -25,7 +26,7 @@
         <child link="${link_01_name}"/>
     </joint>
 
-    <!--
+    
     <xacro:m_link_box name="${link_00_name}" origin_rpy="0 0 0" origin_xyz = "0 0 0"
               mass = "1024"
               ixx = "170.667" ixy = "0" ixz = "0"
