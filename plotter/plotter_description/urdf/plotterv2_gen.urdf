@@ -5,6 +5,7 @@
 <!-- =================================================================================== -->
 <robot name="plotter">
   <!-- END - Include -->
+  <!-- BGN - Robot description -->
   <link name="link_00">
     <inertial>
       <mass value="1024"/>
@@ -25,6 +26,8 @@
     </visual>
   </link>
   <joint name="link_00__link_01" type="fixed">
+    <axis xyz="0 0 1"/>
+    <limit effort="1000.0" lower="-1.57" upper="1.57" velocity="0.5"/>
     <origin rpy="0 0 0" xyz="0 0.002 0"/>
     <parent link="link_00"/>
     <child link="link_01"/>
@@ -39,6 +42,11 @@
       <mechanicalReduction>1</mechanicalReduction>
     </actuator>
   </transmission>
+  <!--
+    <xacro:m_joint_fixed name="${link_00_name}__${link_01_name}" type="fixed"
+       origin_rpy ="0 0 0" origin_xyz = "0 ${0.004/2} 0"
+       parent = "${link_00_name}"  child = "${link_01_name}" />
+-->
   <link name="link_01">
     <inertial>
       <mass value="1024"/>
@@ -133,7 +141,6 @@
   <gazebo>
     <plugin filename="libgazebo_ros_control.so" name="gazebo_ros_control">
       <robotNamespace>/plotter</robotNamespace>
-      <robotSimType>gazebo_ros_control/DefaultRobotHWSim</robotSimType>
     </plugin>
   </gazebo>
 </robot>

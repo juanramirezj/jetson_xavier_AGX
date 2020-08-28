@@ -1,0 +1,47 @@
+<launch>
+    <param name="robot_description" command="$(find xacro)/xacro --inorder '$(find plotter_description)/urdf/plotterv2.xacro'"/>
+
+    <!--    swawn_robot  -->
+    <arg name="x" default="0.0" />
+    <arg name="y" default="0.0" />
+    <arg name="z" default="0.0" />
+    <arg name="roll" default="0.0"/>
+    <arg name="pitch" default="0.0"/>
+    <arg name="yaw" default="0.0"/>
+
+
+    <arg name="urdf_robot_file" default="$(find xacro)/xacro --inorder '$(find plotter_description)/urdf/plotterv2.xacro'" />
+    <arg name="robot_name" default="plotter" />
+
+     <!-- Run a python script to the send a service call to gazebo_ros to spawn a URDF robot -->
+     <node name="urdf_spawner" pkg="gazebo_ros" type="spawn_model" respawn="false" output="screen"
+        args="-urdf -x $(arg x) -y $(arg y) -z $(arg z) -R $(arg roll) -P $(arg pitch) -Y $(arg yaw) -model $(arg robot_name) -param robot_description"/>
+ 	
+    <!--    swawn_robot -->
+ 
+
+    <rosparam file="$(find plotter_description)/config/plotter_control.yaml" command="load"/>  
+
+    <!-- load the controllers -->
+    <node name="controller_spawner" pkg="controller_manager" type="spawner" respawn="false"
+    output="screen" ns="/plotter" args="joint_state_controller link_01__link02_joint_position_controller  link_02__link03_joint_position_controller"/>
+ 
+    <!-- convert joint states to TF transforms for rviz, etc -->
+    <node name="robot_state_publisher" pkg="robot_state_publisher" type="robot_state_publisher"
+    respawn="false" output="screen">
+    <remap from="/joint_states" to="/plotter/joint_states" />
+    </node>
+
+    <!-- send fake joint values -->
+    <!--
+    <node name="joint_state_publisher" pkg="joint_state_publisher" type="joint_state_publisher">
+    <remap from="/joint_states" to="/plotter/joint_states" />
+    <param name="use_gui" value="TRUE"/>
+    </node>
+    -->
+
+
+    <!-- Show in Rviz -->
+    <node name="rviz" pkg="rviz" type="rviz" args="-d $(find plotter_description)/launch/plotter.rviz"/> 
+
+</launch>

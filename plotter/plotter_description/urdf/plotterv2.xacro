@@ -10,6 +10,22 @@
 
 
     <!-- BGN - Robot description -->
+
+    <link name="world" />
+
+    <joint name="world__link_00" type="fixed">
+        <parent link="world"/>
+        <child link="${link_00_name}"/>
+    </joint>
+
+    <link name="${link_00_name}" />
+
+    <joint name="${link_00_name}__${link_01_name}" type="fixed">
+        <parent link="${link_00_name}"/>
+        <child link="${link_01_name}"/>
+    </joint>
+
+    <!--
     <xacro:m_link_box name="${link_00_name}" origin_rpy="0 0 0" origin_xyz = "0 0 0"
               mass = "1024"
               ixx = "170.667" ixy = "0" ixz = "0"
@@ -17,11 +33,22 @@
               izz = "170.67"
               size = "0.032 0.004 0.068" />
 
+   
+
+    <xacro:m_joint name="${link_00_name}__${link_01_name}" type="fixed"
+	axis_xyz = "0 0 1"
+	origin_rpy ="0 0 0" origin_xyz = "0 ${0.004/2} 0"
+        parent = "${link_00_name}"  child = "${link_01_name}"
+        limit_e = "1000.0" 
+        limit_l = "-1.57"  
+        limit_u = "1.57"   
+        limit_v = "0.5" />
+
 
     <xacro:m_joint_fixed name="${link_00_name}__${link_01_name}" type="fixed"
        origin_rpy ="0 0 0" origin_xyz = "0 ${0.004/2} 0"
        parent = "${link_00_name}"  child = "${link_01_name}" />
-
+-->
 
     <xacro:m_link_box name="${link_01_name}" origin_rpy="0 0 0" origin_xyz="0 ${0.036/2 } 0"
         size = "0.02 0.036 0.045"
@@ -66,7 +93,6 @@
         <gazebo>
             <plugin name="gazebo_ros_control" filename="libgazebo_ros_control.so">
                 <robotNamespace>/plotter</robotNamespace>
-		<robotSimType>gazebo_ros_control/DefaultRobotHWSim</robotSimType>
             </plugin>
         </gazebo>
 
