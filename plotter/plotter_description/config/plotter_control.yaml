@@ -1,0 +1,15 @@
+plotter:
+  # Publish all joint states -----------------------------------
+  joint_state_controller:
+    type: joint_state_controller/JointStateController
+    publish_rate: 50  
+  
+  # Position Controllers ---------------------------------------
+  link_01__link02_joint_position_controller:
+    type: effort_controllers/JointPositionController
+    joint: link_01__link_02
+    pid: {p: 100.0, i: 0.01, d: 0.1} 
+  link_02__link03_joint_position_controller:
+    type: effort_controllers/JointPositionController
+    joint: link_02__link_03
+    pid: {p: 100.0, i: 0.01, d: 0.1}
