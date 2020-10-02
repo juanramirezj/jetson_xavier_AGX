@@ -6,6 +6,6 @@ moveit_setup_assistant_config:
   SRDF:
     relative_path: config/plotter.srdf
   CONFIG:
-    author_name: Juan Ramirez Jardua
+    author_name: Juan Ramirez
     author_email: lch_jramirez@hotmail.com
-    generated_timestamp: 1598149672
+    generated_timestamp: 1598673784

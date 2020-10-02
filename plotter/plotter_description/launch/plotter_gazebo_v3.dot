@@ -1,0 +1,176 @@
+digraph plotter_gazebo_v3 {
+	graph [compound=True,
+		fontsize=35,
+		nodesep=2,
+		ranksep=2,
+		ratio=0.772727272727
+	];
+	node [fontsize=35,
+		label="\N"
+	];
+	edge [fontsize=35];
+	subgraph cluster_robot_state_publisher {
+		graph [label=robot_state_publisher,
+			penwidth=3
+		];
+		node_robot_state_publisher_robot_state_publisher_robot_state_publisher		 [fillcolor="#6495ed",
+			label=robot_state_publisher,
+			shape=rectangle,
+			style=filled];
+	}
+	subgraph cluster_gazebo_ros {
+		graph [label=gazebo_ros,
+			penwidth=3
+		];
+		launch_gazebo_ros_empty_world		 [fillcolor="#d3d3d3",
+			label="empty_world.launch",
+			shape=rectangle,
+			style=filled];
+		node_gazebo_ros_spawn_model_urdf_spawner		 [fillcolor="#6495ed",
+			label=urdf_spawner,
+			shape=rectangle,
+			style=filled];
+		node_gazebo_ros_debug_gazebo		 [fillcolor="#6495ed",
+			label=gazebo,
+			shape=rectangle,
+			style=filled];
+		node_gazebo_ros_gzclient_gazebo_gui		 [fillcolor="#6495ed",
+			label=gazebo_gui,
+			shape=rectangle,
+			style=filled];
+	}
+	subgraph cluster_controller_manager {
+		graph [label=controller_manager,
+			penwidth=3
+		];
+		node_controller_manager_spawner_controller_spawner		 [fillcolor="#6495ed",
+			label=controller_spawner,
+			shape=rectangle,
+			style=filled];
+	}
+	subgraph cluster_joint_state_publisher {
+		graph [label=joint_state_publisher,
+			penwidth=3
+		];
+		node_joint_state_publisher_joint_state_publisher_joint_state_publisher		 [fillcolor="#6495ed",
+			label=joint_state_publisher,
+			shape=rectangle,
+			style=filled];
+	}
+	subgraph cluster_plotter_description {
+		graph [label=plotter_description,
+			penwidth=3
+		];
+		launch_plotter_description_plotter_gazebo_v3		 [fillcolor="#d3d3d3",
+			label="plotter_gazebo_v3.launch",
+			shape=rectangle,
+			style=filled];
+	}
+	subgraph cluster_config {
+		graph [label=config,
+			penwidth=3
+		];
+	}
+	subgraph cluster_moveit_ros_move_group {
+		graph [label=moveit_ros_move_group,
+			penwidth=3
+		];
+		node_moveit_ros_move_group_move_group_move_group		 [fillcolor="#6495ed",
+			label=move_group,
+			shape=rectangle,
+			style=filled];
+	}
+	subgraph cluster_plotter_moveit_config {
+		graph [label=plotter_moveit_config,
+			penwidth=3
+		];
+		launch_plotter_moveit_config_planning_context		 [fillcolor="#d3d3d3",
+			label="planning_context.launch",
+			shape=rectangle,
+			style=filled];
+		launch_plotter_moveit_config_move_group		 [fillcolor="#d3d3d3",
+			label="move_group.launch",
+			shape=rectangle,
+			style=filled];
+		launch_plotter_moveit_config_planning_pipeline_launch		 [fillcolor="#d3d3d3",
+			label="planning_pipeline.launch.xml",
+			shape=rectangle,
+			style=filled];
+		launch_plotter_moveit_config_ompl_planning_pipeline_launch		 [fillcolor="#d3d3d3",
+			label="ompl_planning_pipeline.launch.xml",
+			shape=rectangle,
+			style=filled];
+		launch_plotter_moveit_config_trajectory_execution_launch		 [fillcolor="#d3d3d3",
+			label="trajectory_execution.launch.xml",
+			shape=rectangle,
+			style=filled];
+		launch_plotter_moveit_config_fake_moveit_controller_manager_launch		 [fillcolor="#d3d3d3",
+			label="fake_moveit_controller_manager.launch.xml",
+			shape=rectangle,
+			style=filled];
+		launch_plotter_moveit_config_sensor_manager_launch		 [fillcolor="#d3d3d3",
+			label="sensor_manager.launch.xml",
+			shape=rectangle,
+			style=filled];
+		launch_plotter_moveit_config_plotter_moveit_sensor_manager_launch		 [fillcolor="#d3d3d3",
+			label="plotter_moveit_sensor_manager.launch.xml",
+			shape=rectangle,
+			style=filled];
+		launch_plotter_moveit_config_moveit_rviz		 [fillcolor="#d3d3d3",
+			label="moveit_rviz.launch",
+			shape=rectangle,
+			style=filled];
+	}
+	subgraph cluster_rviz {
+		graph [label=rviz,
+			penwidth=3
+		];
+		"node_rviz_rviz_rviz-880"		 [fillcolor="#6495ed",
+			label="rviz-880",
+			shape=rectangle,
+			style=filled];
+	}
+	launch_plotter_moveit_config_move_group -> launch_plotter_moveit_config_planning_context	 [color=black,
+		penwidth=3];
+	launch_plotter_moveit_config_move_group -> launch_plotter_moveit_config_planning_pipeline_launch	 [color=black,
+		penwidth=3];
+	launch_plotter_moveit_config_move_group -> launch_plotter_moveit_config_trajectory_execution_launch	 [color="#ff8c00",
+		label="allow_trajectory_execution:=true",
+		penwidth=3];
+	launch_plotter_moveit_config_move_group -> launch_plotter_moveit_config_sensor_manager_launch	 [color="#ff8c00",
+		label="allow_trajectory_execution:=true",
+		penwidth=3];
+	launch_plotter_moveit_config_move_group -> node_moveit_ros_move_group_move_group_move_group	 [color=black,
+		penwidth=3];
+	launch_plotter_moveit_config_planning_pipeline_launch -> launch_plotter_moveit_config_ompl_planning_pipeline_launch	 [color="#ff8c00",
+		label="pipeline:=ompl",
+		penwidth=3];
+	launch_plotter_moveit_config_trajectory_execution_launch -> launch_plotter_moveit_config_fake_moveit_controller_manager_launch	 [color="#ff8c00",
+		label="moveit_controller_manager:=fake",
+		penwidth=3];
+	launch_plotter_moveit_config_sensor_manager_launch -> launch_plotter_moveit_config_plotter_moveit_sensor_manager_launch	 [color="#ff8c00",
+		label="moveit_sensor_manager:=plotter",
+		penwidth=3];
+	launch_plotter_moveit_config_moveit_rviz -> "node_rviz_rviz_rviz-880"	 [color=black,
+		penwidth=3];
+	launch_plotter_description_plotter_gazebo_v3 -> node_controller_manager_spawner_controller_spawner	 [color=black,
+		penwidth=3];
+	launch_plotter_description_plotter_gazebo_v3 -> node_robot_state_publisher_robot_state_publisher_robot_state_publisher	 [color=black,
+		penwidth=3];
+	launch_plotter_description_plotter_gazebo_v3 -> launch_plotter_moveit_config_planning_context	 [color=black,
+		penwidth=3];
+	launch_plotter_description_plotter_gazebo_v3 -> launch_plotter_moveit_config_move_group	 [color=black,
+		penwidth=3];
+	launch_plotter_description_plotter_gazebo_v3 -> launch_plotter_moveit_config_moveit_rviz	 [color=black,
+		penwidth=3];
+	launch_plotter_description_plotter_gazebo_v3 -> node_joint_state_publisher_joint_state_publisher_joint_state_publisher	 [color=black,
+		penwidth=3];
+	launch_plotter_description_plotter_gazebo_v3 -> launch_gazebo_ros_empty_world	 [color=black,
+		penwidth=3];
+	launch_plotter_description_plotter_gazebo_v3 -> node_gazebo_ros_spawn_model_urdf_spawner	 [color=black,
+		penwidth=3];
+	launch_gazebo_ros_empty_world -> node_gazebo_ros_debug_gazebo	 [color=black,
+		penwidth=3];
+	launch_gazebo_ros_empty_world -> node_gazebo_ros_gzclient_gazebo_gui	 [color=black,
+		penwidth=3];
+}

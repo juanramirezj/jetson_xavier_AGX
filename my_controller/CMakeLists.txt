@@ -8,9 +8,6 @@ project(my_controller)
 ## if COMPONENTS list like find_package(catkin REQUIRED COMPONENTS xyz)
 ## is used, also find other catkin packages
 find_package(catkin REQUIRED COMPONENTS
-  controller_interface
-  hardware_interface
-  pluginlib
   roscpp
 )
 
@@ -106,7 +103,7 @@ find_package(catkin REQUIRED COMPONENTS
 catkin_package(
 #  INCLUDE_DIRS include
 #  LIBRARIES my_controller
-#  CATKIN_DEPENDS controller_interface hardware_interface pluginlib roscpp
+#  CATKIN_DEPENDS roscpp
 #  DEPENDS system_lib
 )
 
@@ -125,7 +122,6 @@ include_directories(
 # add_library(${PROJECT_NAME}
 #   src/${PROJECT_NAME}/my_controller.cpp
 # )
-add_library(my_controller_lib src/my_controller.cpp)
 
 ## Add cmake target dependencies of the library
 ## as an example, code may need to be generated before libraries
@@ -151,7 +147,6 @@ add_library(my_controller_lib src/my_controller.cpp)
 # target_link_libraries(${PROJECT_NAME}_node
 #   ${catkin_LIBRARIES}
 # )
-target_link_libraries(my_controller_lib ${catkin_LIBRARIES})
 
 #############
 ## Install ##

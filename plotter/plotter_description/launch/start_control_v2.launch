@@ -1,0 +1,29 @@
+<launch>
+    <param name="robot_description" command="$(find xacro)/xacro --inorder '$(find plotter_description)/urdf/plotterv2.xacro'"/>
+
+    <!--    swawn_robot  -->
+    <arg name="x" default="0.0" />
+    <arg name="y" default="0.0" />
+    <arg name="z" default="0.0" />
+    <arg name="roll" default="0.0"/>
+    <arg name="pitch" default="0.0"/>
+    <arg name="yaw" default="0.0"/>
+
+
+    <arg name="urdf_robot_file" default="$(find xacro)/xacro --inorder '$(find plotter_description)/urdf/plotterv2.xacro'" />
+    <arg name="robot_name" default="plotter" />
+
+
+    <rosparam file="$(find plotter_description)/config/plotter_control.yaml" command="load"/>  
+
+    <!-- load the controllers -->
+    <node name="controller_spawner" pkg="controller_manager" type="spawner" respawn="false"
+    output="screen" ns="/plotter" args="joint_state_controller l1__l2_jt_pos_controller l2__l3_jt_pos_controller"/>
+ 
+    <!-- convert joint states to TF transforms for rviz, etc -->
+    <node name="robot_state_publisher" pkg="robot_state_publisher" type="robot_state_publisher"
+    respawn="false" output="screen">
+    <remap from="/joint_states" to="/plotter/joint_states" />
+    </node>
+
+</launch>

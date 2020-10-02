@@ -1,0 +1,8 @@
+controller_list:
+  - name: fake_brazo_controller
+    joints:
+      - link_01__link_02
+      - link_02__link_03
+initial:  # Define initial robot poses.
+  - group: brazo
+    pose: normal
