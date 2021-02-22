@@ -1,0 +1,189 @@
+<?xml version="1.0"?>
+
+<robot name="robot_4wd"
+  xmlns:xacro="http://www.ros.org/wiki/xacro">
+ 
+  <xacro:property name="base_width" value="0.16"/>
+  <xacro:property name="base_len" value="0.16"/>
+  <xacro:property name="wheel_radius" value="0.035"/>
+  <xacro:property name="base_wheel_gap" value="0.007"/>
+  <xacro:property name="wheel_separation" value="0.15"/>
+  <xacro:property name="wheel_joint_offset" value="0.02"/>
+  <xacro:property name="caster_wheel_radius" value="0.035"/>
+  <xacro:property name="caster_wheel_joint_offset" value="0.035"/>
+
+  <xacro:property name="rubber_wheel_diameter" value="0.065"/>
+  <xacro:property name="rubber_wheel_width"    value="0.027"/>
+  <xacro:property name="wheel_separation_front_back"   value="0.09142"/>
+  <xacro:property name="wheel_separation_right_left"   value="0.161"/>
+  <xacro:property name="case_width"   value="${wheel_separation_right_left- 0.002}"/>
+  <xacro:property name="case_lenght"   value="0.22"/>
+  <xacro:property name="case_height"   value="0.322"/>
+  <xacro:property name="case_dist_base_to_wheel_axis"   value="0.022"/>
+
+  <xacro:property name="base_sensor_laser_width"   value="0.071"/>
+  <xacro:property name="base_sensor_laser_height"   value="0.106"/>
+
+  <xacro:property name="sensor_laser_height"   value="0.024"/>
+  <xacro:property name="sensor_laser_diameter"   value="0.071"/>
+
+
+  <material name="white">
+    <color rgba="${255/255} ${255/255} ${255/255} 1.0"/>
+  </material>
+  
+<!--
+  Comandos: executed in jetson-ros
+  cd catkin_ws
+  source devel/setup.bash
+  roslaunch robot_4wd_description robot_4wd.launch
+
+  para ver si esta todo ok. esto es porque el comando roslaunch no da un mensaje claro si se cae el xacro
+
+  cd ~/catkin_ws/src/robot_4wd_description/urdf
+  rosrun xacro xacro - -inorder -o robot_4wd.urdf robot_4wd.xacro    las rallitas vas pegadas
+  
+-->
+
+
+<xacro:macro name="box_inertia" params="m w h d">
+    <inertial>
+      <mass value="${m}"/>
+      <inertia ixx="${m / 12.0 * (d*d + h*h)}" ixy="0.0" ixz="0.0" iyy="${m / 12.0 * (w*w + h*h)}" iyz="0.0" izz="${m / 12.0 * (w*w + d*d)}"/>
+    </inertial>
+  </xacro:macro>
+
+    <xacro:macro name="cylinder_inertia" params="m r h">
+    <inertial>
+      <mass value="${m}"/>
+      <inertia ixx="${m*(3*r*r+h*h)/12}" ixy = "0" ixz = "0" iyy="${m*(3*r*r+h*h)/12}" iyz = "0" izz="${m*r*r/2}"/> 
+    </inertial>
+  </xacro:macro>
+
+
+<!--
+  To avoid: 
+  The root link base_footprint has an inertia specified in the URDF, but KDL does not support a root link with an inertia.  As a workaround, you can add an extra dummy link to your URDF.
+
+-->
+
+<link name="dummy">
+</link>
+
+ <link name="base_footprint">
+    <xacro:box_inertia m="20" w="0.001" h="0.001" d="0.001"/>
+    <visual>
+        <origin xyz="0 0 0" rpy="0 0 0" />
+        <geometry>
+            <box size="0.001 0.001 0.001" />
+        </geometry>
+    </visual>
+  </link>
+
+ <joint name="dummy_joint" type="fixed">
+     <parent link="dummy"/>
+     <child link="base_footprint"/>
+   </joint>
+
+ <link name="case">
+    <xacro:box_inertia m="20" w="0.001" h="0.001" d="0.001"/>
+    <visual>
+        <origin xyz="0 0 0" rpy="0 0 0" />
+        <geometry>
+            <box size="${case_lenght} ${case_width} ${case_height}" />
+        </geometry>
+    </visual>
+  </link>
+
+<joint name="base_link_joint" type="fixed">
+    <origin xyz="0 0 ${case_height / 2 +case_dist_base_to_wheel_axis + rubber_wheel_diameter/2}" rpy="0 0 0" />
+    <parent link="base_footprint"/>
+    <child link="case" />
+  </joint>
+
+ <!--
+
+    ^ x      +====+
+    I      xx+    +xx   Front right
+    I      xx+    +xx
+<== * z      +    +
+y            +    +
+          xxx+    +xx   Back right
+          xxx+    +xx 
+             +====+
+ -->
+ <xacro:macro name="wheel" params="prefix reflectx reflecty">
+    <link name="${prefix}_wheel">
+      <visual>
+        <origin xyz="0 0 0" rpy="${pi/2} 0 0"/>
+        <geometry>
+          <cylinder radius="${rubber_wheel_diameter /2}" length="${rubber_wheel_width}"/>
+        </geometry>
+      </visual>
+      <collision>
+        <origin xyz="0 0 0" rpy="${pi/2} 0 0"/>
+        <geometry>
+          <cylinder radius="${rubber_wheel_diameter / 2}" length="${rubber_wheel_width}"/>
+        </geometry>
+      </collision>
+      <xacro:cylinder_inertia m="10" r="${wheel_radius}" h="0.005"/>
+    </link>
+ 
+    <joint name="${prefix}_wheel_joint" type="continuous">
+      <axis xyz="0 1 0" rpy="0 0 0" />
+      <parent link="case"/>
+      <child link="${prefix}_wheel"/>
+      <origin xyz="${wheel_separation_front_back/2 * reflectx} ${ (wheel_separation_right_left/2 + rubber_wheel_width/2) * reflecty } ${-case_height/2 -case_dist_base_to_wheel_axis }" rpy="0 0 0"/>
+    </joint>
+  </xacro:macro>
+
+  <xacro:wheel prefix="front_left"  reflectx="1" reflecty="-1"/>
+  <xacro:wheel prefix="front_right" reflectx="1" reflecty="1"/>
+  <xacro:wheel prefix="back_left"  reflectx="-1" reflecty="-1"/>
+  <xacro:wheel prefix="back_right" reflectx="-1" reflecty="1"/>
+
+
+ <link name="base_sensor_laser">
+    <xacro:box_inertia m="20" w="0.001" h="0.001" d="0.001"/>
+    <visual>
+        <origin xyz="0 0 0" rpy="0 0 0" />
+        <geometry>
+            <box size="${base_sensor_laser_width} ${base_sensor_laser_width} ${base_sensor_laser_height}" />
+        </geometry>
+    </visual>
+  </link>
+
+  <joint name="joint_base_sensor_laser" type="fixed">
+    <origin xyz="0 0 ${case_height/2 + base_sensor_laser_height/2}" rpy="0 0 0"/>
+    <parent link="case"/>
+    <child link="base_sensor_laser"/>
+  </joint>
+
+  <link name="sensor_laser">
+    <visual>
+        <origin xyz="0 0 0" rpy="0 0 0" />
+        <geometry>
+        <cylinder radius="${sensor_laser_diameter /2}" length="${sensor_laser_height}"/>
+        </geometry>
+        <material name="white" />
+    </visual>
+
+    <collision>
+        <origin xyz="0 0 0" rpy="0 0 0"/>
+        <geometry>
+        <cylinder radius="${sensor_laser_diameter /2}" length="${sensor_laser_height}"/>
+        </geometry>
+    </collision>
+    <xacro:cylinder_inertia m="1" r="${sensor_laser_diameter/2}" h="${sensor_laser_height}" />
+  </link>
+
+  <joint name="joint_sensor_laser" type="fixed">
+    <origin xyz="0 0 ${base_sensor_laser_height/2+sensor_laser_height/2}" rpy="0 0 0"/>
+    <parent link="base_sensor_laser"/>
+    <child link="sensor_laser"/>
+  </joint>
+
+
+
+</robot>
+ 
